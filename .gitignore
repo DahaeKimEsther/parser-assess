@@ -1,0 +1,34 @@
+# Claude Code 개인 설정 / worktree
+.claude/settings.local.json
+.claude/worktrees/
+
+# 비밀 값 (.env.example만 커밋)
+.env
+.env.*
+!.env.example
+
+# 대용량 산출물: 데이터셋, 벡터 DB, 모델 파일
+data/
+datasets/
+vectorstore/
+chroma/
+faiss_index/
+*.faiss
+*.sqlite3
+*.gguf
+*.safetensors
+*.bin
+*.pt
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
