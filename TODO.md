@@ -2,6 +2,11 @@
 
 작업을 시작하기 전에 읽고, 끝낸 항목은 체크하며 갱신한다. (공개 저장소이므로 개인 경로/이메일/사내 문서 내용은 적지 않는다.)
 
+## 참고 세션
+
+- 1단계(LiteParse 파서, 복잡도, `complexity` CLI)를 만든 Claude Code 세션 id: `53bf1886-0917-4f3f-8871-043b79bcad83`
+- 설계 결정의 배경(OCR을 끈 이유, 평면 `assess/` 구조, ParseBench 조사 내용 등)은 이 세션 대화에 있다. 대화 기록은 로컬의 Claude Code 프로젝트 세션 폴더에서 이 id의 `.jsonl` 파일로 찾을 수 있고, 이어서 열려면 `claude --resume 53bf1886-0917-4f3f-8871-043b79bcad83`을 쓴다.
+
 ## 현재 상태
 
 - 1단계 완료: LiteParse PDF 파서(`parsers/liteparse.py`), PDF 구조 복잡도(`complexity.py`), `rag-lab-parser complexity <PDF|폴더>`
