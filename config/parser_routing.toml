@@ -1,0 +1,15 @@
+# 문서 유형(확장자)별로 어떤 파서를 쓸지 정한다.
+# 파서 이름은 @register_parser로 등록된 것만 쓸 수 있다.
+
+# 아래 [routes]에 없는 유형을 처리할 파서. 반드시 첫 표([routes]보다) 앞에 써야 한다.
+# 주석 처리해 두면 매핑이 없는 유형은 건너뜀(skipped)으로 기록된다.
+# fallback = "text"
+
+[routes]
+md = "markdown"
+txt = "text"
+
+[output]
+# 출력 방식(writer)과 출력 폴더. 폴더는 .gitignore 대상인 .cache 아래를 기본으로 쓴다.
+writer = "markdown"
+dir = ".cache/parsed"

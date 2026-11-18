@@ -20,7 +20,11 @@ faiss_index/
 *.bin
 *.pt
 
+# 문서 처리 결과: 출력물과 처리 시간 기록 (사내 문서 내용이 들어갈 수 있음)
+.cache/
+
 # Python
+.pytest_cache/
 __pycache__/
 *.py[cod]
 .venv/

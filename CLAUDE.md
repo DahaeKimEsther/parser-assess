@@ -12,23 +12,49 @@
 
 ## 프로젝트 개요
 
-**rag-lab** - RAG(Retrieval-Augmented Generation) 실험용 저장소. **public 저장소**이므로 공개되어도 되는 내용만 커밋합니다.
+**rag-lab** - 사내 문서 검색 RAG(Retrieval-Augmented Generation)를 위한 문서 처리 모듈 저장소. **public 저장소**이므로 공개되어도 되는 내용만 커밋합니다.
 
-- **목표**: (한두 줄로 작성)
-- **기술 스택**: (확정되면 작성)
+- **목표**: 문서를 유형별로 알맞은 파서로 처리해 `.md` 파일로 내보내고, 처리 시간을 계속 측정해 줄여 간다. 청킹, 임베딩, 검색 같은 단계는 필요해질 때 `src/rag_lab/` 아래에 폴더를 추가하며 확장한다.
+- **기술 스택**: Python 3.12+, uv(`pyproject.toml` + `uv.lock`), 런타임 의존성 없음(표준 라이브러리만), 테스트는 pytest
 
 ## 개발 명령어
 
-(환경 설정, 실행, 테스트 명령어를 확정되면 작성)
+uv만 설치되어 있으면 된다. (이 환경에서는 conda의 `uv` 환경을 활성화: `conda activate uv`)
+
+```powershell
+uv sync                                  # .venv 생성과 의존성 설치 (pyproject.toml, uv.lock 기준)
+uv run pytest                            # 테스트
+uv run rag-lab-parser run <문서 폴더>      # 문서 처리 + 처리 시간 기록 (출력: .cache/parsed/)
+uv run rag-lab-parser stats              # 쌓인 처리 시간을 유형/파서별로 요약
+```
+
+**새 파서/출력 방식 추가**: `src/rag_lab/parser/parsers/`(또는 `writers/`)에 파일을 만들고 클래스에 `@register_parser("이름")`(또는 `@register_writer`)을 붙인 뒤, 해당 패키지의 `__init__.py`에서 import하고 `config/parser_routing.toml`에 이름을 적는다. 라우터/측정 코드는 수정하지 않는다.
 
 ## 파일 구조
 
 ```
 rag-lab/
-├── CLAUDE.md            # 이 파일
+├── CLAUDE.md
+├── README.md
+├── pyproject.toml / uv.lock / .python-version
+├── config/
+│   └── parser_routing.toml      # 유형(확장자) → 파서, 출력 방식/폴더
+├── src/rag_lab/parser/
+│   ├── models.py                # ParsedDocument, ProcessingRecord
+│   ├── base.py                  # 파서/writer 인터페이스
+│   ├── registry.py              # @register_parser, @register_writer
+│   ├── detect.py                # 문서 유형 판별(확장자)
+│   ├── router.py                # 라우팅 설정(TOML) 로드, 유형별 파서 선택
+│   ├── pipeline.py              # 유형 판별 → 파싱 → 출력, 시간 측정
+│   ├── metrics.py               # 시간 측정, 기록(JSONL), 요약
+│   ├── cli.py                   # rag-lab-parser run / stats
+│   ├── parsers/                 # markdown, text
+│   └── writers/                 # markdown (OKF 등은 필요할 때 추가)
+├── tests/
+├── .cache/                      # 출력물과 처리 시간 기록 (git 제외)
 └── .claude/
-    ├── settings.json        # 프로젝트 설정 (공유)
-    └── settings.local.json  # 개인 설정 (git 제외)
+    ├── settings.json            # 프로젝트 설정 (공유)
+    └── settings.local.json      # 개인 설정 (git 제외)
 ```
 
 ## 작업 시 주의사항
