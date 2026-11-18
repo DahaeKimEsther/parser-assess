@@ -1,6 +1,10 @@
 # Claude Code 개인 설정 / worktree
 .claude/settings.local.json
 .claude/worktrees/
+.claude/plans/
+
+# 외부 스킬 gstack (garrytan/gstack): 용량이 커서 로컬에서만 사용
+.claude/skills/gstack/
 
 # 비밀 값 (.env.example만 커밋)
 .env
