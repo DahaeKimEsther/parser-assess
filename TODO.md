@@ -4,8 +4,9 @@
 
 ## 참고 세션
 
-- 1단계(LiteParse 파서, 복잡도, `complexity` CLI)를 만든 Claude Code 세션 id: `53bf1886-0917-4f3f-8871-043b79bcad83`
-- 설계 결정의 배경(OCR을 끈 이유, 평면 `assess/` 구조, ParseBench 조사 내용 등)은 이 세션 대화에 있다. 대화 기록은 로컬의 Claude Code 프로젝트 세션 폴더에서 이 id의 `.jsonl` 파일로 찾을 수 있고, 이어서 열려면 `claude --resume 53bf1886-0917-4f3f-8871-043b79bcad83`을 쓴다.
+최신 세션이 위. 작성 규칙은 CLAUDE.md의 "TODO.md 작성 규칙" 참고.
+
+- `53bf1886-0917-4f3f-8871-043b79bcad83`: parser 모듈 설계, LiteParse/ParseBench 조사, 1단계(LiteParse 파서, 복잡도, `complexity` CLI) 구현. 설계 결정의 배경(OCR을 끈 이유, 평면 `assess/` 구조 등)이 이 대화에 있다.
 
 ## 현재 상태
 
