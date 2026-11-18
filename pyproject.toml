@@ -6,6 +6,10 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
 
+[project.optional-dependencies]
+# PDF 파서(LiteParse). 필요할 때만 `uv sync --extra liteparse`로 설치한다.
+liteparse = ["liteparse>=2.19.0"]
+
 [project.scripts]
 rag-lab-parser = "rag_lab.parser.cli:main"
 

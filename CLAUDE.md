@@ -17,6 +17,10 @@
 - **목표**: 문서를 유형별로 알맞은 파서로 처리해 `.md` 파일로 내보내고, 처리 시간을 계속 측정해 줄여 간다. 청킹, 임베딩, 검색 같은 단계는 필요해질 때 `src/rag_lab/` 아래에 폴더를 추가하며 확장한다.
 - **기술 스택**: Python 3.12+, uv(`pyproject.toml` + `uv.lock`), 런타임 의존성 없음(표준 라이브러리만), 테스트는 pytest
 
+## 작업 시작 전
+
+- **`TODO.md`를 먼저 읽는다.** 현재 상태, 다음 작업 체크리스트, 알아둘 사실, 열린 질문이 들어 있다. 작업을 마치면 체크하고 갱신한다. (`.claude/plans/`는 git 제외라 worktree에서 읽을 수 없으므로 인수인계는 `TODO.md`로 한다.)
+
 ## 개발 명령어
 
 uv만 설치되어 있으면 된다. (이 환경에서는 conda의 `uv` 환경을 활성화: `conda activate uv`)
@@ -26,7 +30,11 @@ uv sync                                  # .venv 생성과 의존성 설치 (pyp
 uv run pytest                            # 테스트
 uv run rag-lab-parser run <문서 폴더>      # 문서 처리 + 처리 시간 기록 (출력: .cache/parsed/)
 uv run rag-lab-parser stats              # 쌓인 처리 시간을 유형/파서별로 요약
+uv sync --extra liteparse                # (선택) PDF 파서 LiteParse 설치
+uv run rag-lab-parser complexity <PDF|폴더>  # PDF 구조 복잡도를 단순한 순서로 출력 (LiteParse 필요)
 ```
+
+**선택 의존성**: 기본 `dependencies`는 비워 두고, 무거운 파서 라이브러리는 `[project.optional-dependencies]`로 분리한다. 파서 모듈은 라이브러리를 import 시점이 아니라 `__init__`에서 불러와, 미설치 시 설치 안내가 담긴 `ParserConfigError`로 실패하게 한다(`parser/_liteparse.py` 참고).
 
 **새 파서/출력 방식 추가**: `src/rag_lab/parser/parsers/`(또는 `writers/`)에 파일을 만들고 클래스에 `@register_parser("이름")`(또는 `@register_writer`)을 붙인 뒤, 해당 패키지의 `__init__.py`에서 import하고 `config/parser_routing.toml`에 이름을 적는다. 라우터/측정 코드는 수정하지 않는다.
 
@@ -47,8 +55,10 @@ rag-lab/
 │   ├── router.py                # 라우팅 설정(TOML) 로드, 유형별 파서 선택
 │   ├── pipeline.py              # 유형 판별 → 파싱 → 출력, 시간 측정
 │   ├── metrics.py               # 시간 측정, 기록(JSONL), 요약
-│   ├── cli.py                   # rag-lab-parser run / stats
-│   ├── parsers/                 # markdown, text
+│   ├── complexity.py            # PDF 구조 복잡도 점수 (가중치는 잠정값)
+│   ├── _liteparse.py            # LiteParse 선택 의존성 로딩, 공용 엔진
+│   ├── cli.py                   # rag-lab-parser run / stats / complexity
+│   ├── parsers/                 # markdown, text, liteparse(PDF)
 │   └── writers/                 # markdown (OKF 등은 필요할 때 추가)
 ├── tests/
 ├── .cache/                      # 출력물과 처리 시간 기록 (git 제외)

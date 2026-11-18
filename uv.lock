@@ -21,6 +21,21 @@ wheels = [
 ]
 
 [[package]]
+name = "liteparse"
+version = "2.19.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/1d/c1/562179f34bc184cb874d7f4fefb23c6f471d007c9cb5e5a1df47d4a73c3e/liteparse-2.19.0.tar.gz", hash = "sha256:b90f6cb350611853f6142edafefb715b5973ca8a2998e36b8837781332a089de", size = 688596, upload-time = "2026-11-13T02:37:49.949Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d6/15/403d15c29c40c9a20352d632ff0c679b907f0e7c17294607a313b0d8099f/liteparse-2.19.0-cp310-abi3-macosx_10_12_x86_64.whl", hash = "sha256:ffbc26835590160313fec3736c762ae57088d806adc4395dc87090e4e5607993", size = 11752816, upload-time = "2026-11-13T02:37:35.3Z" },
+    { url = "https://files.pythonhosted.org/packages/79/b1/96128effcacc673e35a0313e34ca461199d08cdc3cb3e04807e461bd1c02/liteparse-2.19.0-cp310-abi3-macosx_11_0_arm64.whl", hash = "sha256:52742af76cbf7dfb4b451d417eb99d87d1dacfceb2bfb89849db5e6b052f2618", size = 11203396, upload-time = "2026-11-13T02:37:37.55Z" },
+    { url = "https://files.pythonhosted.org/packages/b9/d0/ded0c9c41d71d90fe6ac9889d952ef44d89099d3b85301d8952d316abfcc/liteparse-2.19.0-cp310-abi3-manylinux_2_28_aarch64.whl", hash = "sha256:7eea6b66ff5b718f4672c45032ba642e836aef005f782836c73b261f2991a57f", size = 12692857, upload-time = "2026-11-13T02:37:39.246Z" },
+    { url = "https://files.pythonhosted.org/packages/fe/43/492849721200c35822e5f6eb6517170bd306bc5cfe96ba1bbf910b67e837/liteparse-2.19.0-cp310-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:8d1663f742fd4b8e504ebea757a219658b10755088a619243858e376f9f98531", size = 12956108, upload-time = "2026-11-13T02:37:41.316Z" },
+    { url = "https://files.pythonhosted.org/packages/f7/c3/d96ec3444733d03a22a8cad1b592bce0501feef8f26e5e2a0ed88bc50f71/liteparse-2.19.0-cp310-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:1c09f7911d502e044c8f41807213534808ffbd40a64d8abce053ef0699c6d5a1", size = 16089685, upload-time = "2026-11-13T02:37:43.256Z" },
+    { url = "https://files.pythonhosted.org/packages/78/24/ff81674f6d338199e27ba5dd545925202e3bca8ea371acaa42818a652c7c/liteparse-2.19.0-cp310-abi3-win_amd64.whl", hash = "sha256:f58b5e1eda4ac2fbcc17346c9e40162ed9e99c7a8bad95dff50f336e4bbb2f6f", size = 11146829, upload-time = "2026-11-13T02:37:45.566Z" },
+    { url = "https://files.pythonhosted.org/packages/1f/4f/0a200526b7858704ed6841c46702cc417bb27aa56fff579a6f5ab3a037ff/liteparse-2.19.0-cp310-abi3-win_arm64.whl", hash = "sha256:6daddd5770a56761ab4f0afd6b96d5a8670c845c9df06882a67eafcc21c05242", size = 10604750, upload-time = "2026-11-13T02:37:48.314Z" },
+]
+
+[[package]]
 name = "packaging"
 version = "26.3"
 source = { registry = "https://pypi.org/simple" }
@@ -114,6 +129,11 @@ name = "rag-lab"
 version = "0.1.0"
 source = { editable = "." }
 
+[package.optional-dependencies]
+liteparse = [
+    { name = "liteparse" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "pytest" },
@@ -121,6 +141,8 @@ dev = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "liteparse", marker = "extra == 'liteparse'", specifier = ">=2.19.0" }]
+provides-extras = ["liteparse"]
 
 [package.metadata.requires-dev]
 dev = [

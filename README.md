@@ -32,11 +32,30 @@ uv run rag-lab-parser run <문서 폴더>
 uv run rag-lab-parser stats
 ```
 
+## PDF 처리 (선택)
+
+PDF 파서(LiteParse)는 필요할 때만 설치하는 선택 의존성입니다. 기본 `uv sync`에는 포함되지 않습니다.
+
+```powershell
+uv sync --extra liteparse
+```
+
+- **복잡도 확인**: PDF(또는 PDF 폴더)가 얼마나 복잡한지 단순한 문서부터 순서대로 보여 줍니다. 스캔, 다단, 표, 그림이 있는 페이지 수를 세어 0~1 점수로 만든 것이며, 점수식은 아직 잠정값입니다.
+
+  ```powershell
+  uv run rag-lab-parser complexity <PDF 또는 폴더>
+  ```
+
+- **PDF 처리**: `config/parser_routing.toml`의 `[routes]`에 `pdf = "liteparse"`를 추가하면 `run`이 PDF도 처리합니다.
+- **한계**: OCR은 꺼져 있어서 스캔 PDF는 본문이 비어 나옵니다(출력 파일 front matter에 `empty: true`로 표시). 글자가 아주 적은 페이지도 스캔으로 집계될 수 있습니다. 복잡한 표와 차트는 약합니다.
+
 ## 테스트
 
 ```powershell
 uv run pytest
 ```
+
+LiteParse가 설치되어 있지 않으면 실제 PDF를 쓰는 테스트는 건너뜁니다.
 
 ## 구성
 
