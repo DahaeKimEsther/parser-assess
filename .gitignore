@@ -1,6 +1,7 @@
 # Claude Code 개인 설정 / worktree
 .claude/settings.local.json
 .claude/worktrees/
+.claude/plans/
 
 # 비밀 값 (.env.example만 커밋)
 .env
