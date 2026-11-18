@@ -49,32 +49,8 @@ rag-lab/
 - **설치 방법**
   1. gstack을 받아 `.claude/skills/gstack/`에 둔다 (`.git`은 제외)
   2. `.claude/skills/gstack`에서 `./setup --host claude` 실행
-- **git에서 제외 (필수)**: setup이 만든 폴더가 커밋되지 않도록 로컬 전용 파일 `.git/info/exclude`에 아래를 추가한다. 이 저장소의 `.gitignore`에는 넣지 않는다.
-
-  ```gitignore
-  # gstack 스킬 폴더 제외 (커밋된 superpowers 스킬은 예외)
-  .claude/skills/*
-  !.claude/skills/LICENSE
-  !.claude/skills/brainstorming/
-  !.claude/skills/diagnosing-superpowers/
-  !.claude/skills/dispatching-parallel-agents/
-  !.claude/skills/executing-plans/
-  !.claude/skills/finishing-a-development-branch/
-  !.claude/skills/receiving-code-review/
-  !.claude/skills/requesting-code-review/
-  !.claude/skills/skill-creator/
-  !.claude/skills/subagent-driven-development/
-  !.claude/skills/systematic-debugging/
-  !.claude/skills/test-driven-development/
-  !.claude/skills/using-git-worktrees/
-  !.claude/skills/using-superpowers/
-  !.claude/skills/verification-before-completion/
-  !.claude/skills/writing-plans/
-  !.claude/skills/writing-skills/
-  ```
-
+- **git에서 제외 (필수)**: setup이 `.claude/skills/` 아래에 만든 스킬 폴더(`autoplan/`, `qa/`, `review/` 등)가 커밋되지 않도록 각자 로컬 전용 파일 `.git/info/exclude`에 직접 추가한다. 이 저장소의 `.gitignore`에는 넣지 않는다. 커밋된 superpowers 스킬은 제외하면 안 된다
 - **주의**
-  - `.claude/skills/`에 새 스킬을 커밋하려면 위 목록에 `!.claude/skills/<이름>/` 예외를 추가해야 한다 (안 하면 조용히 무시됨)
   - setup은 전역 설정 `~/.claude/settings.json`에 훅을 등록하므로 질문 내용을 읽고 선택한다
   - Windows에서는 심볼릭 링크 대신 파일 복사로 설치되므로 gstack을 갱신하면 `./setup`을 다시 실행한다
   - `/cso`는 Visual Studio 2022 Build Tools(C++)가 없으면 사용할 수 없다
