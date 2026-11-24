@@ -1,7 +1,7 @@
 [project]
-name = "rag-lab"
+name = "parser-assess"
 version = "0.1.0"
-description = "사내 문서 RAG용 문서 처리 모듈"
+description = "파서의 벤치마크 평가 도구"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
@@ -11,7 +11,7 @@ dependencies = []
 liteparse = ["liteparse>=2.19.0"]
 
 [project.scripts]
-rag-lab-parser = "rag_lab.parser.cli:main"
+parser-assess = "parser_assess.cli:main"
 
 [dependency-groups]
 dev = [

@@ -1,8 +1,8 @@
 import pytest
 
-from rag_lab.parser import cli
-from rag_lab.parser.complexity import DocumentComplexity
-from rag_lab.parser.errors import ParserConfigError
+from parser_assess import cli
+from parser_assess.complexity import DocumentComplexity
+from parser_assess.errors import ParserConfigError
 
 
 def make(score, level="simple", pages=1, scanned=0, multicol=0, table=0, figure=0):

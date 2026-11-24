@@ -3,14 +3,14 @@ from types import SimpleNamespace
 
 import pytest
 
-from rag_lab.parser import _liteparse
-from rag_lab.parser.complexity import (
+from parser_assess import _liteparse
+from parser_assess.complexity import (
     FIGURE_COVERAGE_THRESHOLD,
     DocumentComplexity,
     analyze_pdf,
     summarize_pages,
 )
-from rag_lab.parser.errors import ParserConfigError
+from parser_assess.errors import ParserConfigError
 
 
 def layout(column_count=1, ruled_table_count=0, text_table_run_count=0, figure_coverage=0.0):

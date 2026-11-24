@@ -7,7 +7,7 @@
 from functools import lru_cache
 from typing import Any
 
-from rag_lab.parser.errors import ParserConfigError
+from parser_assess.errors import ParserConfigError
 
 INSTALL_HINT = "LiteParse가 설치되어 있지 않습니다. `uv sync --extra liteparse`로 설치하세요."
 

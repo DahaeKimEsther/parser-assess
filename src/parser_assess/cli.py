@@ -1,11 +1,11 @@
-"""명령줄 진입점: `rag-lab-parser complexity <PDF 또는 폴더>`."""
+"""명령줄 진입점: `parser-assess complexity <PDF 또는 폴더>`."""
 
 import argparse
 import sys
 from pathlib import Path
 
-from rag_lab.parser.complexity import analyze_pdf
-from rag_lab.parser.errors import ParserConfigError
+from parser_assess.complexity import analyze_pdf
+from parser_assess.errors import ParserConfigError
 
 
 def _collect_pdfs(target: Path) -> list[tuple[str, Path]]:
@@ -50,7 +50,7 @@ def _cmd_complexity(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="rag-lab-parser", description="PDF 파서 평가")
+    parser = argparse.ArgumentParser(prog="parser-assess", description="PDF 파서 평가")
     sub = parser.add_subparsers(dest="command", required=True)
 
     complexity = sub.add_parser("complexity", help="PDF의 구조 복잡도를 계산해 단순한 문서부터 보여 준다")

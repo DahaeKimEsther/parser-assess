@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from rag_lab.parser._liteparse import get_engine
+from parser_assess._liteparse import get_engine
 
 # 잠정 가중치(합 1.0). 문서 전체 페이지 중 해당 특징이 있는 페이지의 비율에 곱한다.
 WEIGHT_SCANNED = 0.40  # 텍스트 레이어가 없어 OCR이 필요하거나 글자가 깨진 페이지
