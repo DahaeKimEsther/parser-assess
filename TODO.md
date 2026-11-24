@@ -20,7 +20,7 @@
 
 LiteParse가 **어떤 구조 요소까지 쓸 만한지**, 쉬운 문서부터 어려운 문서 순서로 확인한다.
 
-- [ ] **T0(최우선)**: ParseBench-2 데이터를 직접 살펴본다. 정답의 구성요소 표시(`test_rules`, `tags`, `dimension`)와 LiteParse 출력(`--extract-blocks` 등)이 맞물리는지 보고, 구성요소별 탐지율 비교가 가능한지 판단한다. 결과에 따라 `decisions.md`의 정렬/공식 채점 결정을 고친다
+- [ ] **T0(최우선)**: ParseBench-2 데이터를 직접 살펴본다
 - [ ] T1: v2를 `--test`로 실행해 결과 폴더 형식, 문서 id 키, 공식 파이프라인의 LiteParse 버전(우리는 2.19.0), `--test`가 v2에서도 작은 부분만 받는지를 기록한다
 - [ ] T2: `src/parser_assess/cli.py`에 점수 결합 하위 명령 추가. 복잡도 점수 오름차순 정렬, 공식 점수 결합, 결과 폴더가 없거나 형식을 모르면 종료 코드 2, 점수 없는 문서 수 표시
 - [ ] T3: `tests/test_assess_cli.py`
