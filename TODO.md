@@ -32,6 +32,7 @@ LiteParse가 **어떤 구조 요소까지 쓸 만한지**, 쉬운 문서부터 �
 - OCR은 꺼져 있다(`ocr_enabled=False`). 스캔 PDF는 본문이 비고 출력에 `empty: true`가 붙는다.
 - LiteParse는 글자가 아주 적은 페이지를 `sparse-text`로 보고 `needs_ocr=True`를 준다. 그래서 짧은 정상 페이지(목록, 표, 한국어)도 스캔으로 집계되어 complex가 나온다(합성 샘플에서 관찰).
 - 복잡도 점수식(스캔 0.40, 다단 0.25, 표 0.20, 그림 0.15)과 등급 임계값(0.15, 0.40)은 **잠정값**이다.
+- 계획 파일이 `.claude/.claude/plans/`에 생긴 적이 있다. 세션 중 작업 폴더가 `.claude`로 바뀌면 상대 경로인 `plansDirectory`(`.claude/plans`)가 그 폴더 기준으로 풀린 것으로 보인다(미검증). 작업 중 `.claude` 안으로 `cd`하지 말고 절대 경로를 쓴다.
 - LiteParse 예외: 없는 파일은 `FileNotFoundError`, 깨진 PDF는 `liteparse.types.ParseError`, PDF가 아닌 파일은 예외 없이 빈 결과가 나온다.
 - **parse-bench 실행**(실측): `uv tool install "parse-bench[liteparse]"`로 전역 설치한다(버전 2.1.3). `lit` 실행 파일이 PATH에 없으므로 `$env:LITEPARSE_BIN = "$(uv tool dir)\parse-bench\Scripts\lit.exe"`로 지정한다(창을 닫으면 사라짐). `data\parsebench`에서 실행하면 데이터와 결과가 `data/`(git 제외) 안에 생긴다. 예: `parse-bench run liteparse_markdown --dataset parsebench-2 --test --open_report=False --force=True`
 - parse-bench 옵션 주의(실측): `--test`는 카테고리당 3개만 받는다. 빼면 v2 전체(9,215개 파일, 3시간 이상)를 받는다. `--open_report` 기본값이 True라 브라우저가 열린다. `--dataset` 기본값은 v1(`parsebench`)이다.
