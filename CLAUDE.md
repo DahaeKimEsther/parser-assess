@@ -12,9 +12,9 @@
 
 ## 프로젝트 개요
 
-**rag-lab** - 사내 문서 검색 RAG(Retrieval-Augmented Generation)를 위한 문서 처리 모듈 저장소. **public 저장소**이므로 공개되어도 되는 내용만 커밋합니다.
+**parser-assess** - 파서가 벤치마크에서 어느 문서까지 쓸 만한지 판단하는 평가 도구 저장소. **public 저장소**이므로 공개되어도 되는 내용만 커밋합니다.
 
-- **목표**: 문서를 유형별로 알맞은 파서로 처리해 `.md` 파일로 내보내고, 처리 시간을 계속 측정해 줄여 간다. 청킹, 임베딩, 검색 같은 단계는 필요해질 때 `src/rag_lab/` 아래에 폴더를 추가하며 확장한다.
+- **목표**: 파서(현재 LiteParse)를 벤치마크(ParseBench-2) 문서로 평가한다. 문서 복잡도 점수와 공식 채점 결과를 한 표로 합쳐, 어떤 구조 요소까지 쓸 만한지 확인한다. 문서 처리, 시간 측정, 청킹·임베딩·검색 확장은 하지 않는다.
 - **기술 스택**: Python 3.12+, uv(`pyproject.toml` + `uv.lock`), 런타임 의존성 없음(표준 라이브러리만), 테스트는 pytest
 
 ## 작업 시작 전
@@ -38,9 +38,9 @@
 
 - **위치/이름**: `docs/worklog/YYYY-MM-DD.md`. 하루에 세션이 여러 개여도 한 파일에 모은다.
 - **작성 시점**: 사용자가 요청할 때만 작성한다. 요청 없이 만들거나 커밋에 포함하지 않는다.
-- **초안 만들기**: 전역 스킬 `daily-claude-code-recap`으로 그날의 세션을 훑어 초안을 만든 뒤, **rag-lab 관련 내용만** 추려서 적는다. 이 스킬은 모든 프로젝트의 세션 로그를 읽으므로 다른 프로젝트 내용이 섞이지 않게 걸러낸다.
+- **초안 만들기**: 전역 스킬 `daily-claude-code-recap`으로 그날의 세션을 훑어 초안을 만든 뒤, **parser-assess 관련 내용만** 추려서 적는다. 이 스킬은 모든 프로젝트의 세션 로그를 읽으므로 다른 프로젝트 내용이 섞이지 않게 걸러낸다.
 - **구성**: `한 줄 요약` → `한 일`(변경·결과, 수치가 있으면 함께) → `결정과 이유` → `막힌 점 / 다음 할 일`. 한 일은 커밋 메시지와 겹치므로 짧게 쓰고, 결정과 이유를 가장 충실히 쓴다.
-- **언어/공개**: 한국어. 공개 저장소이므로 개인 경로, 이메일, API 키, 사내 문서 내용은 적지 않는다. 스킬·환경 설정 같은 개인 작업 환경 이야기는 rag-lab 내용이 아니면 적지 않는다.
+- **언어/공개**: 한국어. 공개 저장소이므로 개인 경로, 이메일, API 키, 사내 문서 내용은 적지 않는다. 스킬·환경 설정 같은 개인 작업 환경 이야기는 parser-assess 내용이 아니면 적지 않는다.
 - **세션 id**: 해당 날짜의 세션 id를 파일 맨 아래 `참고 세션`에 `TODO.md`와 같은 형식으로 적을 수 있다.
 
 ## 개발 명령어
@@ -50,40 +50,27 @@ uv만 설치되어 있으면 된다. (이 환경에서는 conda의 `uv` 환경�
 ```powershell
 uv sync                                  # .venv 생성과 의존성 설치 (pyproject.toml, uv.lock 기준)
 uv run pytest                            # 테스트
-uv run rag-lab-parser run <문서 폴더>      # 문서 처리 + 처리 시간 기록 (출력: .cache/parsed/)
-uv run rag-lab-parser stats              # 쌓인 처리 시간을 유형/파서별로 요약
 uv sync --extra liteparse                # (선택) PDF 파서 LiteParse 설치
-uv run rag-lab-parser complexity <PDF|폴더>  # PDF 구조 복잡도를 단순한 순서로 출력 (LiteParse 필요)
+uv run parser-assess complexity <PDF|폴더>  # PDF 구조 복잡도를 단순한 순서로 출력 (LiteParse 필요)
+uv tool install "parse-bench[liteparse]"   # 공식 평가 도구 parse-bench 설치 (프로젝트 밖 전역)
 ```
 
-**선택 의존성**: 기본 `dependencies`는 비워 두고, 무거운 파서 라이브러리는 `[project.optional-dependencies]`로 분리한다. 파서 모듈은 라이브러리를 import 시점이 아니라 `__init__`에서 불러와, 미설치 시 설치 안내가 담긴 `ParserConfigError`로 실패하게 한다(`parser/_liteparse.py` 참고).
-
-**새 파서/출력 방식 추가**: `src/rag_lab/parser/parsers/`(또는 `writers/`)에 파일을 만들고 클래스에 `@register_parser("이름")`(또는 `@register_writer`)을 붙인 뒤, 해당 패키지의 `__init__.py`에서 import하고 `config/parser_routing.toml`에 이름을 적는다. 라우터/측정 코드는 수정하지 않는다.
+**선택 의존성**: 기본 `dependencies`는 비워 두고, 무거운 파서 라이브러리는 `[project.optional-dependencies]`로 분리한다. 라이브러리는 import 시점이 아니라 사용할 때 불러와, 미설치 시 설치 안내가 담긴 `ParserConfigError`로 실패하게 한다(`parser_assess/_liteparse.py` 참고).
 
 ## 파일 구조
 
 ```
-rag-lab/
+parser-assess/
 ├── CLAUDE.md
 ├── README.md
 ├── pyproject.toml / uv.lock / .python-version
-├── config/
-│   └── parser_routing.toml      # 유형(확장자) → 파서, 출력 방식/폴더
-├── src/rag_lab/parser/
-│   ├── models.py                # ParsedDocument, ProcessingRecord
-│   ├── base.py                  # 파서/writer 인터페이스
-│   ├── registry.py              # @register_parser, @register_writer
-│   ├── detect.py                # 문서 유형 판별(확장자)
-│   ├── router.py                # 라우팅 설정(TOML) 로드, 유형별 파서 선택
-│   ├── pipeline.py              # 유형 판별 → 파싱 → 출력, 시간 측정
-│   ├── metrics.py               # 시간 측정, 기록(JSONL), 요약
-│   ├── complexity.py            # PDF 구조 복잡도 점수 (가중치는 잠정값)
+├── src/parser_assess/
+│   ├── errors.py                # ParserConfigError
 │   ├── _liteparse.py            # LiteParse 선택 의존성 로딩, 공용 엔진
-│   ├── cli.py                   # rag-lab-parser run / stats / complexity
-│   ├── parsers/                 # markdown, text, liteparse(PDF)
-│   └── writers/                 # markdown (OKF 등은 필요할 때 추가)
+│   ├── complexity.py            # PDF 구조 복잡도 점수 (가중치는 잠정값)
+│   └── cli.py                   # parser-assess complexity
 ├── tests/
-├── .cache/                      # 출력물과 처리 시간 기록 (git 제외)
+├── data/                        # 평가용 데이터와 결과 (git 제외)
 └── .claude/
     ├── settings.json            # 프로젝트 설정 (공유)
     └── settings.local.json      # 개인 설정 (git 제외)

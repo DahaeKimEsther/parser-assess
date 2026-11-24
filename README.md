@@ -1,6 +1,6 @@
-# rag-lab
+# parser-assess
 
-사내 문서 검색 RAG를 위한 문서 처리 모듈입니다. 문서를 유형별로 알맞은 파서로 처리해 `.md` 파일로 내보내고, 처리 시간을 기록해 계속 줄여 가는 것이 목표입니다.
+파서가 벤치마크에서 어느 문서까지 쓸 만한지 판단하는 평가 도구입니다. 지금은 LiteParse(PDF 파서)를 평가합니다.
 
 ## 준비
 
@@ -18,36 +18,21 @@
    uv sync
    ```
 
+3. PDF 파서(LiteParse)는 필요할 때만 설치하는 선택 의존성입니다. 기본 `uv sync`에는 포함되지 않습니다.
+
+   ```powershell
+   uv sync --extra liteparse
+   ```
+
 ## 실행
 
-문서 폴더를 처리하고 결과를 `.cache/parsed/`에 `.md`로 저장합니다. 처리 시간은 `.cache/parser/metrics.jsonl`에 쌓입니다.
+PDF(또는 PDF 폴더)가 얼마나 복잡한지 단순한 문서부터 순서대로 보여 줍니다. 스캔, 다단, 표, 그림이 있는 페이지 수를 세어 0~1 점수로 만든 것이며, 점수식은 아직 잠정값입니다.
 
 ```powershell
-uv run rag-lab-parser run <문서 폴더>
+uv run parser-assess complexity <PDF 또는 폴더>
 ```
 
-쌓인 처리 시간을 유형/파서별로 요약해서 봅니다.
-
-```powershell
-uv run rag-lab-parser stats
-```
-
-## PDF 처리 (선택)
-
-PDF 파서(LiteParse)는 필요할 때만 설치하는 선택 의존성입니다. 기본 `uv sync`에는 포함되지 않습니다.
-
-```powershell
-uv sync --extra liteparse
-```
-
-- **복잡도 확인**: PDF(또는 PDF 폴더)가 얼마나 복잡한지 단순한 문서부터 순서대로 보여 줍니다. 스캔, 다단, 표, 그림이 있는 페이지 수를 세어 0~1 점수로 만든 것이며, 점수식은 아직 잠정값입니다.
-
-  ```powershell
-  uv run rag-lab-parser complexity <PDF 또는 폴더>
-  ```
-
-- **PDF 처리**: `config/parser_routing.toml`의 `[routes]`에 `pdf = "liteparse"`를 추가하면 `run`이 PDF도 처리합니다.
-- **한계**: OCR은 꺼져 있어서 스캔 PDF는 본문이 비어 나옵니다(출력 파일 front matter에 `empty: true`로 표시). 글자가 아주 적은 페이지도 스캔으로 집계될 수 있습니다. 복잡한 표와 차트는 약합니다.
+- **한계**: OCR은 꺼져 있어서 스캔 PDF는 본문이 비어 나옵니다. 글자가 아주 적은 페이지도 스캔으로 집계될 수 있습니다.
 
 ## 테스트
 
@@ -56,7 +41,3 @@ uv run pytest
 ```
 
 LiteParse가 설치되어 있지 않으면 실제 PDF를 쓰는 테스트는 건너뜁니다.
-
-## 구성
-
-문서 유형별로 어떤 파서를 쓸지는 `config/parser_routing.toml`에서 정합니다. 새 파서나 출력 방식은 `src/rag_lab/parser/parsers/`, `src/rag_lab/parser/writers/`에 파일을 추가하고 `@register_parser`, `@register_writer`로 등록한 뒤 설정에 이름을 적으면 됩니다.
