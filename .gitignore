@@ -1,6 +1,8 @@
 # Claude Code 개인 설정 / worktree
 .claude/settings.local.json
 .claude/worktrees/
+# plan 파일은 임시 메모: 결정은 Decisions.md에 적는다
+.claude/plans/
 
 # 비밀 값 (.env.example만 커밋)
 .env
